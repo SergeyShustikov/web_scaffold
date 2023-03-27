@@ -2,6 +2,8 @@
 
 A Flutter plugin that allows you to create webpages faster.
 
+Currently in [https://img.shields.io/badge/STATUS-BETA-blueviolet?style=for-the-badge]
+
 ## Getting Started
 
 ### Parameters
@@ -20,10 +22,13 @@ A Flutter plugin that allows you to create webpages faster.
         ],
       ),
       header: _buildHeader(),
+      headerSettings: HeaderSettings(
+        headerHeight: kToolbarHeight,
+        pinned: true,
+      ),
       body: _buildBody(), // required
       footer: _buildFooter(),
       linkConfiguration: true, // Header and footer will take the same flexible space. default = true
-      pinnedHeader: true, // Does the header is the part of body or not. default = true
     );
   }
 ```

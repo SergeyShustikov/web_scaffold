@@ -31,10 +31,13 @@ class ExampleUsage extends StatelessWidget {
         ],
       ),
       header: _buildHeader(),
+      headerSettings: HeaderSettings(
+        headerHeight: kToolbarHeight,
+        pinned: true,
+      ),
       body: _buildBody(),
       footer: _buildFooter(),
       linkConfiguration: true,
-      pinnedHeader: true,
     );
   }
 

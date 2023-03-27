@@ -14,6 +14,10 @@ class ExampleUsage extends StatelessWidget {
         FlexPart(1),
       ]),
       header: _buildHeader(),
+      headerSettings: HeaderSettings(
+        headerHeight: kToolbarHeight,
+        pinned: true,
+      ),
       body: _buildBody(),
       footer: _buildFooter(),
       linkConfiguration: true,
