@@ -2,7 +2,7 @@
 
 A Flutter plugin that allows you to create webpages faster.
 
-Currently in [https://img.shields.io/badge/STATUS-BETA-blueviolet?style=for-the-badge]
+![image](https://img.shields.io/badge/STATUS-BETA-blueviolet?style=for-the-badge)
 
 ## Getting Started
 
