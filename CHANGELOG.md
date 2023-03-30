@@ -1,6 +1,10 @@
+## 0.0.5
+
+Added bodyKey parameter to WebScaffold to make able scrolling preserve.
+
 ## 0.0.4
 
-Add flex parameter to BodyConfiguration parts
+Added flex parameter to BodyConfiguration parts
 
 ## 0.0.3
 

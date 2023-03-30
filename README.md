@@ -13,6 +13,7 @@ A Flutter plugin that allows you to create webpages faster.
   @override
   Widget build(BuildContext context) {
     return WebScaffold(
+      bodyKey: PageStorageKey(0), // for preserve scrolling for example
       // required
       bodyConfiguration: const BodyConfiguration(
         [
