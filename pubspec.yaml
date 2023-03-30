@@ -1,6 +1,6 @@
 name: web_scaffold
 description: Flutter library that helps create webpages faster
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/SergeyShustikov/web_scaffold
 
 environment:

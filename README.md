@@ -16,9 +16,9 @@ A Flutter plugin that allows you to create webpages faster.
       // required
       bodyConfiguration: const BodyConfiguration(
         [
-          FlexPart(1), // similar to Flexible with flex 1
-          BodyPart(5), // similar to Flexible with body as child with flex 5
-          FlexPart(1), // // similar to Flexible with flex 1
+          FlexPart(), // similar to Flexible with flex 1
+          BodyPart(flex:5), // similar to Flexible with body as child with flex 5
+          FlexPart(), // // similar to Flexible with flex 1
         ],
       ),
       header: _buildHeader(),
