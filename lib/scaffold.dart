@@ -9,9 +9,10 @@ class WebScaffold extends StatelessWidget {
   final BodyConfiguration bodyConfiguration;
   final Widget? drawer;
   final bool linkConfiguration;
-
+  final Key? bodyKey;
   const WebScaffold({
     super.key,
+    this.bodyKey,
     this.header,
     this.headerSettings,
     this.footer,
@@ -48,6 +49,7 @@ class WebScaffold extends StatelessWidget {
               pinned: headerSettings?.pinned ?? true,
             ),
           SliverToBoxAdapter(
+            key: bodyKey,
             child: bodyRow,
           ),
           if (footer != null)
