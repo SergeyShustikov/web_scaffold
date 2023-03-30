@@ -25,9 +25,9 @@ class ExampleUsage extends StatelessWidget {
     return WebScaffold(
       bodyConfiguration: const BodyConfiguration(
         [
-          FlexPart(1),
-          BodyPart(5),
-          FlexPart(1),
+          FlexPart(flex: 1),
+          BodyPart(flex: 5),
+          FlexPart(flex: 1),
         ],
       ),
       header: _buildHeader(),
