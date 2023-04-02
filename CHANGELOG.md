@@ -1,3 +1,7 @@
+## 0.0.8
+
+Remove content height of body expansion logic.
+
 ## 0.0.7
 
 Solve error. Make able content to expand

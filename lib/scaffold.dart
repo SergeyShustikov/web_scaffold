@@ -68,7 +68,7 @@ class _WebScaffoldState extends State<WebScaffold> {
     );
 
     var screenHeight = MediaQuery.of(context).size.height;
-    var remainingSpace = screenHeight - (headerHeight + contentHeight + footerHeight);
+    var remainingSpace = screenHeight - (headerHeight + footerHeight);
     debugPrint('remaining space = $remainingSpace');
     return Scaffold(
       drawer: widget.drawer,
@@ -81,7 +81,7 @@ class _WebScaffoldState extends State<WebScaffold> {
               toolbarHeight: widget.headerSettings?.headerHeight ?? kToolbarHeight,
               pinned: widget.headerSettings?.pinned ?? true,
             ),
-          if (widget.expandBody && _contentSize == null)
+          if (!widget.expandBody || _contentSize == null)
             SliverToBoxAdapter(
               key: widget.bodyKey,
               child: MeasureSize(
@@ -97,7 +97,7 @@ class _WebScaffoldState extends State<WebScaffold> {
           if (contentHeight + headerHeight + footerHeight < screenHeight)
             SliverToBoxAdapter(
               child: SizedBox(
-                height: screenHeight - (headerHeight + contentHeight + footerHeight),
+                height: remainingSpace,
                 child: widget.expandBody ? SizedBox.expand(child: bodyRow) : null,
               ),
             ),
