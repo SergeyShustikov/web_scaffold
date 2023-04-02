@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:web_scaffold/measure_size.dart';
 import 'package:web_scaffold/web_scaffold.dart';
 
@@ -130,12 +129,4 @@ class _WebScaffoldState extends State<WebScaffold> {
       }
     }).toList();
   }
-}
-
-class _SliverFillRemainingWithScrollable extends SingleChildRenderObjectWidget {
-  const _SliverFillRemainingWithScrollable();
-
-  @override
-  RenderSliverFillRemainingWithScrollable createRenderObject(BuildContext context) =>
-      RenderSliverFillRemainingWithScrollable();
 }
