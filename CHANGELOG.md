@@ -1,3 +1,7 @@
+## 0.0.6
+
+Make footer sticky to bottom of website
+
 ## 0.0.5
 
 Added bodyKey parameter to WebScaffold to make able scrolling preserve.

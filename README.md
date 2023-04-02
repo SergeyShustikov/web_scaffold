@@ -29,6 +29,7 @@ A Flutter plugin that allows you to create webpages faster.
       ),
       body: _buildBody(), // required
       footer: _buildFooter(),
+      footer: FooterSettings(footerHeight: kToolbarHeight)
       linkConfiguration: true, // Header and footer will take the same flexible space. default = true
     );
   }

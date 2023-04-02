@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:web_scaffold/web_scaffold.dart';
 
 class WebScaffold extends StatelessWidget {
   final Widget? header;
   final HeaderSettings? headerSettings;
+  final FooterSettings? footerSettings;
   final Widget? footer;
   final Widget body;
   final BodyConfiguration bodyConfiguration;
   final Widget? drawer;
   final bool linkConfiguration;
   final Key? bodyKey;
-  const WebScaffold({
+  final ScrollController _bodyScrollController = ScrollController();
+  WebScaffold({
     super.key,
     this.bodyKey,
     this.header,
     this.headerSettings,
     this.footer,
+    this.footerSettings,
     required this.body,
     this.drawer,
     required this.bodyConfiguration,
@@ -38,9 +42,12 @@ class WebScaffold extends StatelessWidget {
       children: _buildChild(body),
     );
 
+    var screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       drawer: drawer,
       body: CustomScrollView(
+        controller: _bodyScrollController,
         slivers: [
           if (header != null)
             SliverAppBar(
@@ -52,6 +59,14 @@ class WebScaffold extends StatelessWidget {
             key: bodyKey,
             child: bodyRow,
           ),
+          if (_bodyScrollController.position.maxScrollExtent < screenHeight)
+            SliverLayoutBuilder(
+              builder: (BuildContext context, SliverConstraints constraints) {
+                var remainingSpaceCandidateHeight =
+                    constraints.remainingPaintExtent - (footerSettings?.footerHeight ?? 0);
+                return SliverToBoxAdapter(child: Container(height: remainingSpaceCandidateHeight));
+              },
+            ),
           if (footer != null)
             SliverToBoxAdapter(
               child: footerComposedWidet ?? footer,
