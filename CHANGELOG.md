@@ -1,4 +1,8 @@
-## 0.0.6
+## 0.0.7
+
+Solve error. Make able content to expand
+
+# 0.0.6
 
 Make footer sticky to bottom of website
 

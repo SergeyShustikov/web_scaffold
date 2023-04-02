@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:web_scaffold/measure_size.dart';
 import 'package:web_scaffold/web_scaffold.dart';
 
-class WebScaffold extends StatelessWidget {
+class WebScaffold extends StatefulWidget {
   final Widget? header;
   final HeaderSettings? headerSettings;
   final FooterSettings? footerSettings;
@@ -11,9 +12,10 @@ class WebScaffold extends StatelessWidget {
   final BodyConfiguration bodyConfiguration;
   final Widget? drawer;
   final bool linkConfiguration;
+  final bool expandBody;
   final Key? bodyKey;
-  final ScrollController _bodyScrollController = ScrollController();
-  WebScaffold({
+
+  const WebScaffold({
     super.key,
     this.bodyKey,
     this.header,
@@ -24,52 +26,85 @@ class WebScaffold extends StatelessWidget {
     this.drawer,
     required this.bodyConfiguration,
     this.linkConfiguration = true,
+    this.expandBody = false,
   });
+
+  @override
+  State<WebScaffold> createState() => _WebScaffoldState();
+}
+
+class _WebScaffoldState extends State<WebScaffold> {
+  final ScrollController _bodyScrollController = ScrollController();
+  Size? _contentSize;
+
+  double get contentHeight => _contentSize?.height ?? 0;
+  double get headerHeight => widget.headerSettings?.headerHeight ?? 0;
+  double get footerHeight => widget.footerSettings?.footerHeight ?? 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _bodyScrollController.addListener(() {
+      var screenHeight = MediaQuery.of(context).size.height;
+
+      var isConentTallerThanScreen = _bodyScrollController.position.maxScrollExtent < screenHeight;
+      debugPrint('isConentTallerThanScreen = $isConentTallerThanScreen');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     late Row bodyRow;
     Widget? headerComposedWidget, footerComposedWidet;
-    if (linkConfiguration) {
+    if (widget.linkConfiguration) {
       headerComposedWidget = Row(
-        children: _buildChild(header),
+        children: _buildChild(widget.header),
       );
       footerComposedWidet = Row(
-        children: _buildChild(footer),
+        children: _buildChild(widget.footer),
       );
     }
     bodyRow = Row(
-      children: _buildChild(body),
+      children: _buildChild(widget.body),
     );
 
     var screenHeight = MediaQuery.of(context).size.height;
-
+    var remainingSpace = screenHeight - (headerHeight + contentHeight + footerHeight);
+    debugPrint('remaining space = $remainingSpace');
     return Scaffold(
-      drawer: drawer,
+      drawer: widget.drawer,
       body: CustomScrollView(
         controller: _bodyScrollController,
         slivers: [
-          if (header != null)
+          if (widget.header != null)
             SliverAppBar(
-              flexibleSpace: headerComposedWidget ?? header,
-              toolbarHeight: headerSettings?.headerHeight ?? kToolbarHeight,
-              pinned: headerSettings?.pinned ?? true,
+              flexibleSpace: headerComposedWidget ?? widget.header,
+              toolbarHeight: widget.headerSettings?.headerHeight ?? kToolbarHeight,
+              pinned: widget.headerSettings?.pinned ?? true,
             ),
-          SliverToBoxAdapter(
-            key: bodyKey,
-            child: bodyRow,
-          ),
-          if (_bodyScrollController.position.maxScrollExtent < screenHeight)
-            SliverLayoutBuilder(
-              builder: (BuildContext context, SliverConstraints constraints) {
-                var remainingSpaceCandidateHeight =
-                    constraints.remainingPaintExtent - (footerSettings?.footerHeight ?? 0);
-                return SliverToBoxAdapter(child: Container(height: remainingSpaceCandidateHeight));
-              },
-            ),
-          if (footer != null)
+          if (widget.expandBody && _contentSize == null)
             SliverToBoxAdapter(
-              child: footerComposedWidet ?? footer,
+              key: widget.bodyKey,
+              child: MeasureSize(
+                onChange: (Size size) {
+                  debugPrint('ContentSize = $size');
+                  setState(() {
+                    _contentSize = size;
+                  });
+                },
+                child: bodyRow,
+              ),
+            ),
+          if (contentHeight + headerHeight + footerHeight < screenHeight)
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: screenHeight - (headerHeight + contentHeight + footerHeight),
+                child: widget.expandBody ? SizedBox.expand(child: bodyRow) : null,
+              ),
+            ),
+          if (widget.footer != null)
+            SliverToBoxAdapter(
+              child: footerComposedWidet ?? widget.footer,
             )
         ],
       ),
@@ -81,7 +116,7 @@ class WebScaffold extends StatelessWidget {
       return [];
     }
 
-    return bodyConfiguration.items.map<Widget>((e) {
+    return widget.bodyConfiguration.items.map<Widget>((e) {
       if (e is BodyPart) {
         return Flexible(flex: e.flex, child: child);
       } else if (e is FlexPart) {
@@ -95,4 +130,12 @@ class WebScaffold extends StatelessWidget {
       }
     }).toList();
   }
+}
+
+class _SliverFillRemainingWithScrollable extends SingleChildRenderObjectWidget {
+  const _SliverFillRemainingWithScrollable();
+
+  @override
+  RenderSliverFillRemainingWithScrollable createRenderObject(BuildContext context) =>
+      RenderSliverFillRemainingWithScrollable();
 }
