@@ -1,3 +1,7 @@
+## 0.0.9
+
+Reworked body layouting.
+
 ## 0.0.8
 
 Remove content height of body expansion logic.

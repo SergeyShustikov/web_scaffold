@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:web_scaffold/measure_size.dart';
 import 'package:web_scaffold/web_scaffold.dart';
 
 class WebScaffold extends StatefulWidget {
@@ -67,45 +66,38 @@ class _WebScaffoldState extends State<WebScaffold> {
       children: _buildChild(widget.body),
     );
 
-    var screenHeight = MediaQuery.of(context).size.height;
-    var remainingSpace = screenHeight - (headerHeight + footerHeight);
-    debugPrint('remaining space = $remainingSpace');
     return Scaffold(
       drawer: widget.drawer,
-      body: CustomScrollView(
-        controller: _bodyScrollController,
-        slivers: [
-          if (widget.header != null)
-            SliverAppBar(
-              flexibleSpace: headerComposedWidget ?? widget.header,
-              toolbarHeight: widget.headerSettings?.headerHeight ?? kToolbarHeight,
-              pinned: widget.headerSettings?.pinned ?? true,
-            ),
-          if (!widget.expandBody || _contentSize == null)
-            SliverToBoxAdapter(
-              key: widget.bodyKey,
-              child: MeasureSize(
-                onChange: (Size size) {
-                  debugPrint('ContentSize = $size');
-                  setState(() {
-                    _contentSize = size;
-                  });
-                },
-                child: bodyRow,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          var screenHeight = constraints.maxHeight;
+          var remainingSpace = screenHeight - (headerHeight + footerHeight);
+          debugPrint('Remaining vertical space = $remainingSpace');
+          var contentLessThanAvailableSpace = contentHeight < remainingSpace;
+          debugPrint('contentLessThanAvailableSpace = $contentLessThanAvailableSpace');
+          return CustomScrollView(
+            controller: _bodyScrollController,
+            slivers: [
+              if (widget.header != null)
+                SliverAppBar(
+                  flexibleSpace: headerComposedWidget ?? widget.header,
+                  toolbarHeight: widget.headerSettings?.headerHeight ?? kToolbarHeight,
+                  pinned: widget.headerSettings?.pinned ?? true,
+                ),
+              SliverToBoxAdapter(
+                key: widget.bodyKey,
+                child: SizedBox(
+                  height: remainingSpace,
+                  child: bodyRow,
+                ),
               ),
-            ),
-          if (contentHeight + headerHeight + footerHeight < screenHeight)
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: remainingSpace,
-                child: widget.expandBody ? SizedBox.expand(child: bodyRow) : null,
-              ),
-            ),
-          if (widget.footer != null)
-            SliverToBoxAdapter(
-              child: footerComposedWidet ?? widget.footer,
-            )
-        ],
+              if (widget.footer != null)
+                SliverToBoxAdapter(
+                  child: SizedBox(height: footerHeight, child: footerComposedWidet ?? widget.footer),
+                )
+            ],
+          );
+        },
       ),
     );
   }
