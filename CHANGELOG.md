@@ -1,3 +1,7 @@
+## 0.0.10
+
+Fallback the expansion of body
+
 ## 0.0.9
 
 Reworked body layouting.

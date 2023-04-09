@@ -75,6 +75,23 @@ class _WebScaffoldState extends State<WebScaffold> {
           debugPrint('Remaining vertical space = $remainingSpace');
           var contentLessThanAvailableSpace = contentHeight < remainingSpace;
           debugPrint('contentLessThanAvailableSpace = $contentLessThanAvailableSpace');
+          Widget? bodyWidget;
+
+          if (widget.expandBody) {
+            bodyWidget = SliverToBoxAdapter(
+              key: widget.bodyKey,
+              child: SizedBox(
+                height: remainingSpace,
+                child: bodyRow,
+              ),
+            );
+          } else {
+            bodyWidget = SliverToBoxAdapter(
+              key: widget.bodyKey,
+              child: bodyRow,
+            );
+          }
+
           return CustomScrollView(
             controller: _bodyScrollController,
             slivers: [
@@ -84,13 +101,7 @@ class _WebScaffoldState extends State<WebScaffold> {
                   toolbarHeight: widget.headerSettings?.headerHeight ?? kToolbarHeight,
                   pinned: widget.headerSettings?.pinned ?? true,
                 ),
-              SliverToBoxAdapter(
-                key: widget.bodyKey,
-                child: SizedBox(
-                  height: remainingSpace,
-                  child: bodyRow,
-                ),
-              ),
+              bodyWidget,
               if (widget.footer != null)
                 SliverToBoxAdapter(
                   child: SizedBox(height: footerHeight, child: footerComposedWidet ?? widget.footer),
